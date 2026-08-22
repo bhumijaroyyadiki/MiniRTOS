@@ -1,0 +1,26 @@
+cc = arm-none-eabi-gcc
+
+cflags = -mcpu=cortex-m4 -mthumb -O0 -g3 -ffreestanding -Wall -Wextra
+ldflags = -T linker/stm32f446.ld -nostdlib -Wl,--gc-sections
+
+rule compile_c
+  command = $cc $cflags -c $in -o $out
+  description = Compiling $in
+
+rule assemble
+  command = $cc $cflags -c $in -o $out
+  description = Assembling $in
+
+rule link
+  command = $cc $in $ldflags -o $out
+  description = Linking $out
+
+build build/main.o: compile_c src/main.c
+build build/task.o: compile_c src/task.c
+
+build build/startup.o: assemble startup/startup.s
+build build/svc.o: assemble src/svc.S
+
+build build/minirtos.elf: link build/main.o build/task.o build/startup.o build/svc.o
+
+default build/minirtos.elf

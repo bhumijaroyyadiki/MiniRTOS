@@ -1,0 +1,5 @@
+build/
+.ninja_log
+*.o
+*.elf
+*.map
