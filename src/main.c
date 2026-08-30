@@ -1,12 +1,12 @@
 #include "task.h"
-
-int main(void)
+void main(void)
 {
     task_system_init();
 
-    __asm volatile ("svc #0");//This generates the SVC exception.
+    current_task = &task_a_tcb;
+    current_task->state = TASK_RUNNING;
 
-    while (1)
-    {
-    }
+    __asm volatile ("svc #0");
+
+    while (1) {}
 }

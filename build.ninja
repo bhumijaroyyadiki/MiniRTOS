@@ -20,7 +20,8 @@ build build/task.o: compile_c src/task.c
 
 build build/startup.o: assemble startup/startup.s
 build build/svc.o: assemble src/svc.S
+build build/context_switch.o: assemble src/context_switch.s
 
-build build/minirtos.elf: link build/main.o build/task.o build/startup.o build/svc.o
-
+build build/minirtos.elf: link build/main.o build/task.o build/startup.o build/svc.o build/context_switch.o
 default build/minirtos.elf
+
