@@ -1,5 +1,5 @@
 #include "task.h"
-// Assuming your TCB struct is named 'TCB_t' or 'TaskControlBlock'
+
 TCB task_a_tcb; 
 TCB task_b_tcb;
 static _Alignas(8) uint32_t task_a_stack[TASK_STACK_WORDS];
