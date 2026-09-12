@@ -6,7 +6,7 @@
 .type SVC_Handler, %function
 
 // References to external symbols defined in your C code
-.extern task_a_tcb
+.extern current_task
 
 SVC_Handler:
     // 1. Determine whether the caller used MSP or PSP
@@ -26,13 +26,17 @@ SVC_Handler:
     b      svc_unknown      // Any other number (like the old #1) is now handled as unknown
 
 svc_bootstrap:
-    // Your verified Week 1 bootstrapper to launch the initial environment
-    ldr    r0, =task_a_tcb
-    ldr    r0, [r0]
-    ldmia  r0!, {r4-r11}    // Pop cold registers from initial stack
-    msr    psp, r0          // Set up the process stack pointer
+    // Launch whichever task main() left in current_task.
+    // current_task is a POINTER VARIABLE, so this needs two loads:
+    //   r0 = &current_task  ->  r0 = current_task (a TCB*)  ->  r0 = tcb->sp
+    // (sp is the first member of TCB, hence the bare [r0].)
+    ldr    r0, =current_task
+    ldr    r0, [r0]           // r0 = current_task  (TCB *)
+    ldr    r0, [r0]           // r0 = current_task->sp
+    ldmia  r0!, {r4-r11}      // Pop cold registers from initial stack
+    msr    psp, r0            // Set up the process stack pointer
     isb
-    ldr    lr, =0xFFFFFFFD  // Return to Thread mode using PSP
+    ldr    lr, =0xFFFFFFFD    // Return to Thread mode using PSP
     bx     lr
 
 svc_unknown:

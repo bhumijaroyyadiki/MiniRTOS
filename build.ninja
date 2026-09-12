@@ -17,14 +17,15 @@ rule link
 
 build build/main.o: compile_c src/main.c
 build build/task.o: compile_c src/task.c
-build build/port.o: assemble src/port.c
-build build/gpio.o: assemble src/gpio.c
-build build/sync.o: assemble src/sync.c
+build build/port.o: compile_c src/port.c
+build build/gpio.o: compile_c src/gpio.c
+build build/sync.o: compile_c src/sync.c
+build build/demo.o: compile_c src/demo.c
 
 build build/startup.o: assemble startup/startup.s
 build build/svc.o: assemble src/svc.S
 build build/context_switch.o: assemble src/context_switch.s
 
-build build/minirtos.elf: link build/main.o build/task.o build/startup.o build/svc.o build/context_switch.o build/port.o build/gpio.o build/sync.o
+build build/minirtos.elf: link build/main.o build/task.o build/startup.o build/svc.o build/context_switch.o build/port.o build/gpio.o build/sync.o build/demo.o
 default build/minirtos.elf
 
