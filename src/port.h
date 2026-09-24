@@ -10,7 +10,14 @@
 #define SYST_CTRL_ENABLE    (1UL << 0)
 #define SYST_CTRL_TICKINT   (1UL << 1)
 #define SYST_CTRL_CLKSOURCE (1UL << 2)
+#define DEMCR       (*(volatile uint32_t*)0xE000EDFC)
+#define DWT_CTRL    (*(volatile uint32_t*)0xE0001000)
+#define DWT_CYCCNT  (*(volatile uint32_t*)0xE0001004)
 
+#define DEMCR_TRCENA      (1UL << 24)
+#define DWT_CTRL_CYCCNTENA (1UL << 0)
+
+void dwt_init(void);
 /* CMSIS is not on the include path (we build -nostdlib -ffreestanding), so the
    two intrinsics we actually need are spelled out here.
    The "memory" clobber is the important part: it stops the compiler hoisting a

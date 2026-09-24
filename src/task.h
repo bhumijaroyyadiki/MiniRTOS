@@ -12,7 +12,23 @@
 /* Cortex-M register definition to trigger PendSV */
 #define SCB_ICSR       (*(volatile unsigned long*)0xE000ED04)
 #define PENDSVSET      (1UL << 28)
+//Instrumentation Globals
+extern uint32_t task_count;
 
+extern volatile uint32_t sched_time_last;
+extern volatile uint32_t sched_time_max;
+
+extern volatile uint32_t sched_ready_count;
+extern volatile int32_t  sched_highest_prio;
+extern volatile uint32_t sched_start_index;
+
+extern volatile uint32_t sched_time_max_pass1;
+extern volatile uint32_t sched_time_max_pass2;
+extern volatile uint32_t sched_time_max_pass3;
+extern volatile uint32_t systick_latency_last;
+extern volatile uint32_t systick_latency_max;
+
+extern volatile uint32_t spurious_wake_count;
 typedef enum{
     TASK_READY,
     TASK_RUNNING,
@@ -55,7 +71,8 @@ typedef struct
 
     /* GPIO bit raised while this task owns the CPU. 0 = no trace channel. */
     uint32_t trace_pin;
-
+   uint32_t cpu_cycles_total;
+   uint32_t last_resume_cycle;
 } TCB;
 
 extern TCB *current_task;
@@ -96,5 +113,5 @@ uint32_t task_get_count(void);
 TCB     *task_get_by_index(uint32_t index);
 
 void SVC_Handler(void);
-
+uint32_t task_stack_high_water_words(TCB *tcb);
 #endif

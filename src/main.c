@@ -12,8 +12,8 @@ void main(void)
        unconditionally, so a second call would register a second, aliased copy
        of every task and quietly corrupt the scheduler. */
     task_system_init();
-    demo_init();
-
+    baseline_init();
+    dwt_init();
     /* Let the scheduler choose the first task rather than hardcoding one.
        svc.S bootstraps from current_task, so whatever is picked here is what
        actually starts. */
